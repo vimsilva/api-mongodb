@@ -4,6 +4,6 @@ namespace api_mongodb.ChargeDatabase.Interfaces
 {
     public interface IChargeDatabaseCore
     {
-        public Task<IList<Pokemon>> GetPokemons();
+        public Task<string> ChargePokemons();
     }
 }

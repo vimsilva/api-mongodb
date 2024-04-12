@@ -17,8 +17,8 @@ namespace api_mongodb.ChargeDatabase
         [Route("/charge")]
         public async Task<IActionResult> Charge()
         {
-            var pokemons = await _chargeDatabaseCore.GetPokemons();
-            return Ok("Charge Database!");
+            var pokemons = await _chargeDatabaseCore.ChargePokemons();
+            return Ok(pokemons);
         }
     }
 }
