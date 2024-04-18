@@ -1,5 +1,6 @@
 ﻿using api_mongodb.ChargeDatabase.Entities;
 using api_mongodb.ChargeDatabase.Interfaces;
+using api_mongodb.Infrastructure.Data.Interfaces;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -7,19 +8,25 @@ namespace api_mongodb.ChargeDatabase
 {
     public class ChargeDatabaseCore : IChargeDatabaseCore
     {
+        private readonly IPokemonRepository _pokemonRespoitory;
+
+        public ChargeDatabaseCore(IPokemonRepository pokemonRepository) 
+        { 
+            _pokemonRespoitory = pokemonRepository;
+        }
         public async Task<string> ChargePokemons()
         {
             var pokemons = await GetPokemons();
             foreach (var pokemon in pokemons)
             {
-                var pokemonDetails = await GetPokemonDetais(pokemon.Url);
+                var pokemonDetails = await GetPokemonDetails(pokemon.Url);
                 pokemon.Copy(pokemonDetails);
-                Console.WriteLine(pokemon);
             }
-            return "Charge Database!";
+            var result = await SavePokemons(pokemons);
+            return $"Charge Database: {result}";
         }
 
-        private async Task<IList<Pokemon>> GetPokemons()
+        private async Task<IList<PokemonEntity>> GetPokemons()
         {
             PokemonPayload pokemons = new PokemonPayload();
             using (var httpClient = new HttpClient())
@@ -45,7 +52,7 @@ namespace api_mongodb.ChargeDatabase
             return Parse(pokemons);
         }
 
-        private async Task<Pokemon> GetPokemonDetais(string url)
+        private async Task<PokemonEntity> GetPokemonDetails(string url)
         {
             PokemonDetailsPayload pokemon = new PokemonDetailsPayload();
             using (var httpClient = new HttpClient())
@@ -71,12 +78,12 @@ namespace api_mongodb.ChargeDatabase
             return Parse(pokemon);
         }
 
-        private IList<Pokemon> Parse(PokemonPayload pokemonPayload)
+        private IList<PokemonEntity> Parse(PokemonPayload pokemonPayload)
         {
-            IList<Pokemon> pokemons = new List<Pokemon>();
+            IList<PokemonEntity> pokemons = new List<PokemonEntity>();
             foreach (var result in pokemonPayload.results)
             {
-                pokemons.Add(new Pokemon
+                pokemons.Add(new PokemonEntity
                 {
                     Name = result.name,
                     Url = result.url
@@ -85,11 +92,16 @@ namespace api_mongodb.ChargeDatabase
             return pokemons;
         }
 
-        private Pokemon Parse(PokemonDetailsPayload pokemonDetailsPayload)
+        private async Task<bool> SavePokemons(IList<PokemonEntity> pokemons)
         {
-            return new Pokemon
+            return await _pokemonRespoitory.ChargePokemons(pokemons);
+        }
+
+        private PokemonEntity Parse(PokemonDetailsPayload pokemonDetailsPayload)
+        {
+            return new PokemonEntity
             {
-                Id = pokemonDetailsPayload.id,
+                PokemonId = pokemonDetailsPayload.id,
                 Order = pokemonDetailsPayload.order,
                 Name = pokemonDetailsPayload.name,
                 Height = pokemonDetailsPayload.height,

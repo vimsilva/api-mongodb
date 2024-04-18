@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  pokemondb:
+    container_name: pokemondb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ${APPDATA}/MongoDB:/data/db
+
+  api-mongodb:
+    container_name: pokemonapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings__ConnectionString=mongodb://pokemondb:27017"
+      - "DatabaseSettings__DatabaseName=pokemondb"
+      - "DatabaseSettings__PokemonCollection=pokemonapi"
+    depends_on:
+      - pokemondb
+    ports:
+      - "8080"
+      - "8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro

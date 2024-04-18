@@ -2,9 +2,9 @@
 
 namespace api_mongodb.ChargeDatabase.Entities
 {
-    public class Pokemon
+    public class PokemonEntity : BaseEntity
     {
-        public int Id { get; set; }
+        public int PokemonId { get; set; }
         public string Url { get; set; }
         public int Order { get; set; }
         public string Name { get; set; }
@@ -12,9 +12,9 @@ namespace api_mongodb.ChargeDatabase.Entities
         public int Weight { get; set; }
         public IList<string> Type { get; set; }
 
-        public void Copy(Pokemon poke)
+        public void Copy(PokemonEntity poke)
         {
-            this.Id = poke.Id;
+            this.PokemonId = poke.PokemonId;
             this.Order = poke.Order;
             this.Height = poke.Height;
             this.Weight = poke.Weight;

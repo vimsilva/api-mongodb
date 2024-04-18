@@ -1,5 +1,8 @@
 using api_mongodb.ChargeDatabase;
 using api_mongodb.ChargeDatabase.Interfaces;
+using api_mongodb.Infrastructure.Data;
+using api_mongodb.Infrastructure.Data.Interfaces;
+using api_mongodb.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -19,6 +22,8 @@ namespace api_mongodb
             });
 
             builder.Services.AddScoped<IChargeDatabaseCore, ChargeDatabaseCore>();
+            builder.Services.AddScoped<IPokemonContext, PokemonContext>();
+            builder.Services.AddScoped<IPokemonRepository, PokemonRepository>();
 
             var app = builder.Build();
             if (builder.Environment.IsDevelopment())
