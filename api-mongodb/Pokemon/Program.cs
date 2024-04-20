@@ -1,3 +1,5 @@
+using api_mongodb.Application;
+using api_mongodb.Application.Interfaces;
 using api_mongodb.ChargeDatabase;
 using api_mongodb.ChargeDatabase.Interfaces;
 using api_mongodb.Infrastructure.Data;
@@ -24,6 +26,7 @@ namespace api_mongodb
             builder.Services.AddScoped<IChargeDatabaseCore, ChargeDatabaseCore>();
             builder.Services.AddScoped<IPokemonContext, PokemonContext>();
             builder.Services.AddScoped<IPokemonRepository, PokemonRepository>();
+            builder.Services.AddScoped<IGetPokemon, GetPokemon>();
 
             var app = builder.Build();
             if (builder.Environment.IsDevelopment())

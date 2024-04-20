@@ -1,8 +1,8 @@
-﻿using System.Runtime.CompilerServices;
+﻿using api_mongodb.ChargeDatabase.Entities;
 
-namespace api_mongodb.ChargeDatabase.Entities
+namespace api_mongodb.Core
 {
-    public class PokemonEntity : BaseApiEntity
+    public class Pokemon : BaseEntity
     {
         public int PokemonId { get; set; }
         public string Url { get; set; }
@@ -12,7 +12,7 @@ namespace api_mongodb.ChargeDatabase.Entities
         public int Weight { get; set; }
         public IList<string> Type { get; set; }
 
-        public void Copy(PokemonEntity poke)
+        public void Copy(Pokemon poke)
         {
             this.PokemonId = poke.PokemonId;
             this.Order = poke.Order;
@@ -21,6 +21,4 @@ namespace api_mongodb.ChargeDatabase.Entities
             this.Type = poke.Type;
         }
     }
-
-   
 }

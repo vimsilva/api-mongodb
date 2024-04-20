@@ -1,7 +1,7 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 
-namespace api_mongodb.ChargeDatabase.Entities
+namespace api_mongodb.Core
 {
     public class BaseEntity
     {
